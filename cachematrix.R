@@ -1,31 +1,39 @@
 ## Carol_Coutinho
 #Function Assignment2
 
-#First function calculate the determinant of the matrix.
-#If the Det is different of zero, the your matrix assume inverse.
-
 makeCacheMatrix <- function(x = matrix()) {
-  Det <- det(x)
-  if (Det != 0){
-    print("Your matrix can assume inverse, you can use cacheSolve function.")
+    i <- NULL
+  set <- function(y) { #Here we set the value of the matrix
+          x <<- y
+          i <<- NULL
   }
-  else {
-    print("Please, choose another matrix")
-  }
+  get <- function() x # Here the function get the matrix value
+  setinverse <- function(inverse) i <<- inverse #Then the function set the inverse of the matrix
+  getinverse <- function() i # Get the inverse of the matrix
+  list(set = set,
+       get = get,
+       setinverse = setinverse,
+       getinverse = getinverse)
 }
 
-#Please input your matrix here:
-
-x <-  #matrix(c(5, 1, 0,
-        #3,-1, 2,
-        #4, 0,-1), nrow=3, byrow=TRUE) #Exemple
-
-makeCacheMatrix(x)
-
-## Write a short comment describing this function
-
+# The cacheSolve is a function that return the inverse of the matrix that is set. 
 cacheSolve <- function(x, ...) {
- inverse <-  solve(x)%*%x
+  i <- x$getinverse()
+  if (!is.null(i)) {
+          message("getting cached data")
+          return(i)
+  }
+  data <- x$get()
+  i <- solve(data, ...)
+  x$setinverse(i)
+  i
 }
 
-y <- cacheSolve(x)
+#Exemple: 
+# You can try with your on matrix.
+
+C <- matrix(c(2,9,3,4),2,2)
+C_1 <- makeCacheMatrix(C)
+cacheSolve(C_1)
+
+cacheSolve(C_1) 
